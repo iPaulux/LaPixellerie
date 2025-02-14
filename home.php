@@ -13,7 +13,7 @@
 			<p>La Pixellerie, c'est l'association des passionnées de jeux vidéo qui souhaitent aller au-delà du simple plaisir de jouer pour se plonger dans la création. Développeurs, designers, scénaristes, musiciens ou simples curieux : ici, chaque talent trouve sa place pour imaginer et concevoir ensemble des univers uniques et captivants.</p>
 			<a href="PXLR/contact">Nous rejoindre</a>
 		</div>
-		<img data-aos="fade-left" src="<?php bloginfo('template_url') ?>/assets/img/lesgrosgeek.png">
+		<img data-aos="fade-left" src="<?php bloginfo('template_url') ?>/assets/img/Lesgrosgeek.png">">
 	</section>
 	<section id="actions">
 		<h2>Nos <span class="keyword">actions</span></h2>
@@ -81,7 +81,6 @@
 		</div>
 	</section>
 	<section class="valors">
-	
 					<h2>Nos<span class="keyword"> valeurs</span></h2>
 					<div class="valor">
 						<div data-aos="fade-right" class="vtxt">
@@ -136,42 +135,50 @@
 				
 	</section>
 	<section class="planning">
-		<h2>Le<span class="keyword"> planning</span></h2>
-		<div class="pcards">
-			<div data-aos="zoom-out" class="pcard">
-				<img src="<?php bloginfo('template_url') ?>/assets/img/image6.png">
-				<div class="pinfos">
-					<div class="ptop">
-						<p class="pitre">Game Jam</p>
-						<p class="date">10/01/25</p>
-					</div>
-					<p class="pexte">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt earum animi nam aperiam. </p>
-				</div>
-			</div>
-			<div data-aos="zoom-out" class="pcard">
-				<img src="<?php bloginfo('template_url') ?>/assets/img/image6.png">
-				<div class="pinfos">
-					<div class="ptop">
-						<p class="pitre">Game Jam</p>
-						<p class="date">10/01/25</p>
-					</div>
-					<p class="pexte">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt earum animi nam aperiam. </p>
-				</div>
-			</div>
-			<div data-aos="zoom-out" class="pcard">
-				<img src="<?php bloginfo('template_url') ?>/assets/img/image6.png">
-				<div class="pinfos">
-					<div class="ptop">
-						<p class="pitre">Game Jam</p>
-						<p class="date">10/01/25</p>
-					</div>
-					<p class="pexte">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt earum animi nam aperiam. </p>
-				</div>
-			</div>
-		</div>
-		<a href="PXLR/contact">Voir plus</a>
-		
-	</section>
+    <h2>Le<span class="keyword"> planning</span></h2>
+    <div class="pcards">
+        <?php
+        $recent_events = get_posts(array(
+            'post_type'      => 'event',
+            'posts_per_page' => 3, // Récupérer les 3 plus récents
+            'orderby'        => 'date',
+            'order'          => 'DESC'
+        ));
+
+        if (!empty($recent_events)) {
+            foreach ($recent_events as $event) {
+                $event_id = $event->ID;
+                $event_title = get_the_title($event_id);
+                $event_date = get_the_date('d/m/Y', $event_id);
+                $event_excerpt = get_the_excerpt($event_id);
+                $event_link = get_permalink($event_id);
+                $event_image = get_the_post_thumbnail_url($event_id, 'medium'); // Récupère l’image mise en avant
+                if (!$event_image) {
+                    $event_image = get_template_directory_uri() . '/assets/img/image6.png'; // Image par défaut
+                }
+                ?>
+                
+                <div data-aos="zoom-out" class="pcard">
+                    <img class ="cardimg" src="<?php echo esc_url($event_image); ?>" alt="<?php echo esc_attr($event_title); ?>">
+                    <div class="pinfos">
+                        <div class="ptop">
+                            <p class="pitre"><a href="<?php echo esc_url($event_link); ?>"><?php echo esc_html($event_title); ?></a></p>
+                            <p class="date"><?php echo esc_html($event_date); ?></p>
+                        </div>
+                        <p class="pexte"><?php echo esc_html($event_excerpt); ?></p>
+                    </div>
+                </div>
+
+                <?php
+            }
+        } else {
+            echo "<p>Aucun événement récent trouvé.</p>";
+        }
+        ?>
+    </div>
+    
+</section>
+
 
 	
 	<?php
@@ -179,6 +186,7 @@
 	?>
 
 <script>
+	
      // Sélectionne toutes les listes
   document.querySelectorAll("li").forEach(item => {
     // Ajoute des événements de clic sur le titre et le SVG

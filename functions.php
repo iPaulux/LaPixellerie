@@ -26,84 +26,83 @@ add_theme_support('post-thumbnails');
 /*
 * On utilise une fonction pour créer notre custom post type 'Event'
 */
+/*
+* On utilise une fonction pour créer nos custom post types 'Event' et 'Workshop'
+*/
+function wpm_custom_post_types() {
 
-function wpm_custom_post_type() {
+    // Définition des Custom Post Types
+    $post_types = array(
+        'event' => array(
+            'name'          => 'Event',
+            'slug'          => 'event',
+            'taxonomy_cat'  => 'event_category',
+            'taxonomy_tag'  => 'event_tag'
+        ),
+        'projet' => array(
+            'name'          => 'Projet',
+            'slug'          => 'Projet',
+            'taxonomy_cat'  => 'Projet_category',
+            'taxonomy_tag'  => 'Projet_tag'
+        )
+    );
 
-	// On rentre les différentes dénominations de notre custom post type qui seront affichées dans l'administration
-	$labels = array(
-		// Le nom au pluriel
-		'name'                => _x( 'Event', 'Post Type General Name'),
-		// Le nom au singulier
-		'singular_name'       => _x( 'Event', 'Post Type Singular Name'),
-		// Le libellé affiché dans le menu
-		'menu_name'           => __( 'Event'),
-		// Les différents libellés de l'administration
-		'all_items'           => __( 'Toutes les Event'),
-		'view_item'           => __( 'Voir les Event'),
-		'add_new_item'        => __( 'Ajouter une nouvelle Event'),
-		'add_new'             => __( 'Ajouter'),
-		'edit_item'           => __( 'Editer la Event'),
-		'update_item'         => __( 'Modifier la Event'),
-		'search_items'        => __( 'Rechercher une Event'),
-		'not_found'           => __( 'Non trouvée'),
-		'not_found_in_trash'  => __( 'Non trouvée dans la corbeille'),
-	);
-	
-	// On peut définir ici d'autres options pour notre custom post type
-	
-	$args = array(
-		'label'               => __( 'Event'),
-		'description'         => __( 'Tous sur Event'),
-		'labels'              => $labels,
-		// On définit les options disponibles dans l'éditeur de notre custom post type ( un titre, un auteur...)
-		'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-		/* 
-		* Différentes options supplémentaires
-		*/
-		'show_in_rest' => true,
-		'hierarchical'        => false,
-		'public'              => true,
-		'has_archive'         => true,
-		'rewrite'			  => array( 'slug' => 'event'),
+    foreach ($post_types as $key => $post_type) {
+        // Labels pour l'administration
+        $labels = array(
+            'name'               => _x( $post_type['name'], 'Post Type General Name'),
+            'singular_name'      => _x( $post_type['name'], 'Post Type Singular Name'),
+            'menu_name'          => __( $post_type['name']),
+            'all_items'          => __( 'Toutes les '.$post_type['name']),
+            'view_item'          => __( 'Voir les '.$post_type['name']),
+            'add_new_item'       => __( 'Ajouter une nouvelle '.$post_type['name']),
+            'add_new'            => __( 'Ajouter'),
+            'edit_item'          => __( 'Éditer la '.$post_type['name']),
+            'update_item'        => __( 'Modifier la '.$post_type['name']),
+            'search_items'       => __( 'Rechercher une '.$post_type['name']),
+            'not_found'          => __( 'Non trouvée'),
+            'not_found_in_trash' => __( 'Non trouvée dans la corbeille'),
+        );
 
-	);
-	
-	// On enregistre notre custom post type qu'on nomme ici "serietv" et ses arguments
-	register_post_type( 'event', $args );
+        // Arguments du Custom Post Type
+        $args = array(
+            'label'               => __( $post_type['name']),
+            'description'         => __( 'Tous sur '.$post_type['name']),
+            'labels'              => $labels,
+            'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields'),
+            'show_in_rest'        => true,
+            'hierarchical'        => false,
+            'public'              => true,
+            'has_archive'         => true,
+            'rewrite'             => array( 'slug' => $post_type['slug']),
+        );
 
-     // register taxonomy
-     register_taxonomy('event_category', 'event', array('hierarchical' => true, 'label' => 'Categorie', 'query_var' => true, 'rewrite' => array( 'slug' => 'event-category' )));
+        // Enregistrement du Custom Post Type
+        register_post_type( $key, $args );
 
- 
+        // Enregistrement des taxonomies
+        register_taxonomy(
+            $post_type['taxonomy_cat'],
+            $key,
+            array(
+                'hierarchical' => true,
+                'label'        => 'Catégorie',
+                'query_var'    => true,
+                'rewrite'      => array( 'slug' => $post_type['taxonomy_cat'] )
+            )
+        );
 
-     register_taxonomy('event_tag', 'event', array('hierarchical' => true, 'label' => 'Etiquette', 'query_var' => true, 'rewrite' => array( 'slug' => 'event-tag' )));
- 
-
+        register_taxonomy(
+            $post_type['taxonomy_tag'],
+            $key,
+            array(
+                'hierarchical' => false,
+                'label'        => 'Étiquette',
+                'query_var'    => true,
+                'rewrite'      => array( 'slug' => $post_type['taxonomy_tag'] )
+            )
+        );
+    }
 }
 
-add_action( 'init', 'wpm_custom_post_type', 0 );
-
-add_action('wp_ajax_ajax','router');
-add_action('wp_ajax_nopriv_ajax','router');
-
-
-function _get_category($id,$col = "name", $type="category"){
-    return wp_get_post_terms($id, 'event_'.$type)[0]->$col;
-}
-
-function load_more_posts($lastID){
-	echo json_encode(['id' => $lastID]);
-	wp_die();
-}
-
-function router(){
-	switch ($_POST['sub_action']) {
-		case 'load_posts':
-			load_more_posts($POST['lastID']);
-			break;
-		
-		default:
-			# code...
-			break;
-	}
-}
+add_action( 'init', 'wpm_custom_post_types', 0 );

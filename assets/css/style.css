@@ -54,6 +54,7 @@
 /* Style */
 
 ::selection {
+
 	color: var(--color-purple);
 	background: var(--color-white);
   }
@@ -264,7 +265,7 @@ h4{
 	font-style: normal;
 }
 li{
-	
+	max-width: 30vw;
 	font-family: "NeueMontreal";
 	align-items: start;
 }
@@ -317,6 +318,7 @@ li {
   /* Quand l'élément est actif (classe "active") */
   li.active2 {
 	opacity: 1; /* Opacité pleine */
+	max-width: 20vw;
   }
   
   /* Cacher les paragraphes par défaut */
@@ -347,8 +349,22 @@ li {
 	display: flex;
 	flex-direction: column;
 	gap: 1vw;
-	padding: 2vw;
+	padding: 3vw;
 	background-color: var(--color-white);
+	width: 100%;
+	height: 100%;
+	max-width: 40vw;
+  }
+  .pinfos2{
+	display: flex;
+	flex-direction: column;
+	gap: 1vw;
+	padding: 5vw;
+	background-color: var(--color-white);
+	width: 50vw;
+	height: 25vh;
+	max-width: 40vw;
+	justify-content: center;
   }
   .pexte{
 	color: var(--color-purple);
@@ -358,9 +374,20 @@ li {
 	color: var(--color-purple);
 	font-family: "NeueMontreal-B";
   }
+  .pitre a{
+	text-decoration: none;
+	color: var(--color-purple);
+	font-family: "NeueMontreal-B";
+  }
   .date{
 	color: var(--color-purple);
 	font-family: "NeueMontreal";
+  }
+  .pimg{
+	width: 20vw;
+	height: 25vh;
+	object-fit: cover;
+	
   }
 
   .planning{
@@ -377,7 +404,7 @@ li {
 	gap: 3vw;
   }
 
-  .planning a{
+  .solo{
 	color: var(--color-purple);
 	text-decoration: none;
 	background-color: var(--color-yellow);
@@ -466,17 +493,13 @@ li {
 	width: 30vw;
 	height: 20vw;
 
+
 }
 .event{
 	display: flex;
-
 	justify-content: center;
 	
 
-}
-.event img{
-
-	height: 20vw;
 }
 
 
@@ -863,21 +886,12 @@ nav.show {
 		display: flex;
 		flex-direction: column;
 		gap: 2vh;
-		padding: 5vh;
+		padding: 4vh;
 		background-color: var(--color-white);
+	
 	  }
 	  
-  .planning a{
-	color: var(--color-purple);
-	text-decoration: none;
-	background-color: var(--color-yellow);
-	padding: 1vw;
-	font-family: "Made SOulmaze";
-	font-style: normal;
-	font-size: 2vh;
-	padding-left: 4vw;
-	padding-right: 4vw;
-  }
+ 
   #actions h2{
 	color: var(--color-white);
 	font-family: "Made Soulmaze";
@@ -958,4 +972,38 @@ footer{
 	gap: 2vh;
 	
 
-}}
+}
+.ptop{
+	display: flex;
+	flex-direction: column;
+}
+.cardimg{
+	min-width: 40VW;
+
+	object-fit: cover;
+}
+.pimg{
+	min-width: 40vw;
+	min-height: 5vh;
+	object-fit: cover;
+	
+  }
+  .pinfos2{
+	display: flex;
+	flex-direction: column;
+	gap: 2vh;
+	padding: 10vw;
+	background-color: var(--color-white);
+	min-width: 60vw;
+	height: 25vh;
+	max-width: 40vw;
+	justify-content: center;
+  }
+}
+
+.cardimg{
+	width: 20vw;
+	min-height: 20vw;
+
+	object-fit: cover;
+}
